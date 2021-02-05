@@ -1,3 +1,7 @@
 { "name" : "chess-game",
-  "homepage": "."
+  "homepage": ".",
+  "scripts": {
+    "start": "cd server npm start",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  }
 }
