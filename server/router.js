@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
-router.get('/', (req, res) => {
-  res.send('server is up and running');
-})
-
-router.get('/game', (req, res) => {
-  res.send('game');
+router.get('*', (req, res) => {
+  console.log(path.join(__dirname, "..", "client", "build", "index.html"))
+  res.sendFile(path.join(__dirname, "..", "client", "build"));
 })
 
 module.exports = router;

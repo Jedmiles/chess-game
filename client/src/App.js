@@ -1,15 +1,15 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import Game from './Game';
 import Invite from './Invite';
 
 const App = () => (
-  <React.Fragment>
-    <Router>
+  <div>
+    <Switch>
       <Route path="/game/" component={Game} />
       <Route path="/" exact component={Invite}/>
-    </Router>
-  </React.Fragment>
+    </Switch>   
+  </div>
 )
 
 export default App;
