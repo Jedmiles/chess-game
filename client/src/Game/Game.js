@@ -22,23 +22,16 @@ const Game = ({location}) => {
     socket.on('start', (colour) => {
       setColour(colour);
     })
-    return () => {
-    }
   }, [])
   
   useEffect(() => {
     socket.emit('move', position)
-    return () => { 
-    }
   }, [position])
   
   useEffect(() => {
     socket.on('update', (pos) => {
       setPosition(pos);
     })
-    return () => {
-      
-    }
   }, [])
 
   return (

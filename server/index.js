@@ -16,10 +16,9 @@ const io = socketio(server, {
   }
 });
 
-app.use(router);
 app.use(cors());
 app.use(express.static(path.join(__dirname, "..", "client", "build")));
-app.use(express.static(path.join(__dirname, "..", "client", "public")));
+app.use(router);
 
 io.of('/api/game').on('connection', (socket) => {
   console.log(`${socket.id} connected`);
@@ -27,12 +26,9 @@ io.of('/api/game').on('connection', (socket) => {
   socket.on('join', (room, callback) => {
     if(io._nsps.get('/api/game').adapter.rooms.get(room) === undefined || io._nsps.get('/api/game').adapter.rooms.get(room).size < 2) {
       socket.join(room);
-      // console.log(`${socket.id} joined ${room}`);
-      // console.log(io._nsps.get('/game').adapter.rooms.get(room).size);
       let colour = io._nsps.get('/api/game').adapter.rooms.get(room).size === 1 ? 'black' : 'white';
       socket.emit('start', colour)
       socket.on('move', (pos) => {
-        // console.log(`position: ${pos}`);
         socket.to(room).emit('update', pos);
       })
     }
@@ -41,7 +37,6 @@ io.of('/api/game').on('connection', (socket) => {
       callback({isFull: true});
     }
   });
-
 
   socket.on('disconnect', () => {
     console.log(`${socket.id} disconnected`);

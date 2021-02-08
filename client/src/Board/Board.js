@@ -16,9 +16,6 @@ function Board({position, handleMove, colour}){
     useEffect(() => {
         chess = new Chess();
         chess.load(position);
-        return () => {
-            
-        }
     })
 
     const highlightSquares = (source, squares) => {
@@ -39,6 +36,7 @@ function Board({position, handleMove, colour}){
     const onSquareClick = (sourceSquare) => {
         if (chess.turn() === colour[0]) {
             if (clickedSquare) {
+                console.log(clickedSquare);
                 const move = chess.move({ from: clickedSquare, to: sourceSquare, promotion: 'q' });
                 if (move) {
                     setClickedSquare(null);
