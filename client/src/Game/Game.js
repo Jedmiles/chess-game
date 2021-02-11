@@ -1,15 +1,14 @@
 import io from 'socket.io-client';
 import {useEffect, useState} from 'react'
 import Board from '../Board';
-import Chess from 'chess.js';
 import {Redirect} from 'react-router-dom';
 
 let socket;
 
 const Game = ({location}) => {
-  const ENDPOINT = '/api/game'
+  const ENDPOINT = 'localhost:5000/api/game';
 
-  let [room, setRoom] = useState(location.pathname.split('/')[2])
+  let room = location.pathname.split('/')[2];
   let [position, setPosition] = useState('start');
   let [colour, setColour] = useState(null);
   let [isFull, setIsFull] = useState(false);
@@ -22,7 +21,7 @@ const Game = ({location}) => {
     socket.on('start', (colour) => {
       setColour(colour);
     })
-  }, [])
+  }, [room])
   
   useEffect(() => {
     socket.emit('move', position)
