@@ -1,1 +1,1 @@
-export {default} from './Promoter';
+export { default } from "./Promoter";

@@ -1,43 +1,62 @@
-import io from 'socket.io-client';
-import {useEffect, useState} from 'react'
-import Board from '../Board';
-import {Redirect} from 'react-router-dom';
+import io from "socket.io-client";
+import { React, useEffect, useState } from "react";
+import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import Board from "../Board";
 
 let socket;
 
-const Game = ({location}) => {
-  const ENDPOINT = 'localhost:5000/api/game';
+const Game = ({ location }) => {
+  const ENDPOINT = "localhost:5000/api/game";
 
-  let room = location.pathname.split('/')[2];
-  let [position, setPosition] = useState('start');
-  let [colour, setColour] = useState(null);
-  let [isFull, setIsFull] = useState(false);
+  const room = location.pathname.split("/")[2];
+  const [position, setPosition] = useState("start");
+  const [colour, setColour] = useState(null);
+  const [isFull, setIsFull] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('join', room, (err) => {
-        setIsFull(err.isFull);
+    socket.emit("join", room, (err) => {
+      setIsFull(err.isFull);
     });
-    socket.on('start', (colour) => {
-      setColour(colour);
-    })
-  }, [room])
-  
+    socket.on("start", (pieceColour) => {
+      // Might have to change back to colour, or change on server
+      setColour(pieceColour);
+    });
+  }, [room]);
+
   useEffect(() => {
-    socket.emit('move', position)
-  }, [position])
-  
+    socket.emit("move", position);
+  }, [position]);
+
   useEffect(() => {
-    socket.on('update', (pos) => {
+    socket.on("update", (pos) => {
       setPosition(pos);
-    })
-  }, [])
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on("game over", () => {
+      setGameOver(true);
+    });
+  });
 
   return (
     <div>
-      {isFull ? <Redirect to="/"/> : (colour !== null && <Board position={position} handleMove={setPosition} colour={colour}/>)}
+      {isFull || gameOver ? (
+        <Redirect to="/" />
+      ) : (
+        colour !== null && (
+          <Board position={position} handleMove={setPosition} colour={colour} />
+        )
+      )}
     </div>
-  )
-}
+  );
+};
+
+Game.propTypes = {
+  location: PropTypes.string.isRequired,
+};
 
 export default Game;

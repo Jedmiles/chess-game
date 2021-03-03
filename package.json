@@ -1,4 +1,5 @@
-{ "name" : "chess-game",
+{
+  "name": "chess-game",
   "homepage": ".",
   "scripts": {
     "start": "cd server && npm i && node index.js",
